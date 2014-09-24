@@ -1,0 +1,1 @@
+--output boot.img --kernel boot.img-kernel --ramdisk boot.img-ramdisk.cpio.gz   --cmdline '' --board '' --base 80000000 --pagesize 2048
