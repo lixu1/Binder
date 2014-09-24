@@ -1,0 +1,7 @@
+function show(id){
+	var myTable= document.getElementById(id);
+	if (myTable.style.display=="block")
+		myTable.style.display ="none";
+	else
+		myTable.style.display="block"
+}

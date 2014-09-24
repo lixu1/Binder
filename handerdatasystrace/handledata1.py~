@@ -1,0 +1,96 @@
+#--*-- coding:utf-8 --*--
+import sys
+
+"""
+处理下面格式的function_graph输出结果
+argv[1]: ftrace function_graph output
+#     TIME        CPU  DURATION                  FUNCTION CALLS
+#      |          |     |   |                     |   |   |   |
+
+  200.200134 |   1)   0.000 us    |              } /* _raw_spin_unlock_irqrestore */
+  200.200134 |   1) + 61.035 us   |            } /* try_to_wake_up */
+  200.200134 |   1) + 61.035 us   |          } /* wake_up_state */
+  200.200134 |   1) + 61.035 us   |        } /* wake_futex */
+  200.200134 |   1)               |        _raw_spin_unlock() {
+  200.200134 |   1)   0.000 us    |          sub_preempt_count();
+  200.200134 |   1)   0.000 us    |        }
+  200.200134 |   1)   0.000 us    |        drop_futex_key_refs();
+  200.200164 |   1) + 91.553 us   |      } /* futex_wake */
+  200.200164 |   1) ! 122.070 us  |    } /* do_futex */
+  200.200164 |   1) ! 122.070 us  |  } /* sys_futex */
+  200.200164 |   1)               |  sys_ioctl() {
+  
+"""
+def main():
+  print "<html>\n<head>\n<title></title>\n<meta http-equiv=\"content-type\" content=\"text/html\" charset=\"utf-8\"><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">\n<style>\n.view {overflow: hidden;top: 0;bottom: 0;left: 0;right: 0;}\n</style>\n</head>\n<body>\n<hr>\n<div class=\"view\">\n</div>\n<hr>\n<script language=\"javascript\" type=\"text/javascript\" src=\"script.js\">\n</script>"
+  print "<script language=\"javascript\">\ndocument.addEventListener('DOMContentLoaded', function() {\nif (!linuxPerfData)\nreturn;\nvar m = new tracing.TraceModel(linuxPerfData);\nvar timelineViewEl = document.querySelector('.view');\nui.decorate(timelineViewEl, tracing.TimelineView);\ntimelineViewEl.model = m;\ntimelineViewEl.tabIndex = 1;\ntimelineViewEl.timeline.focusElement = timelineViewEl;\n});\n</script>"
+  print "<script>\nvar linuxPerfData = \"\\\n# tracer: nop\\n\\\n#\\n\\\n# entries-in-buffer/entries-written: 42096/42096   #P:2\\n\\\n#\\n\\\n#                              _-----=> irqs-off\\n\\\n#                             / _----=> need-resched\\n\\\n#                            | / _---=> hardirq/softirq\\n\\\n#                            || / _--=> preempt-depth\\n\\\n#                            ||| /     delay\\n\\\n#           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION\\n\\\n#              | |       |   ||||       |         |\\n\\"
+  
+  with open(sys.argv[1],"r") as f:
+    data = f.read()
+  lines = [line for line in data.split("\n") if len(line.strip()) != 0]      
+  temp_data = []
+  #把绝对时间，函数运行时间与函数名分别提取
+  for line in lines:
+    temp_data.append([line[2:12],line[17:18],line[35:]])
+  for i,t in enumerate(temp_data[:-1]):
+    if "binder_ioctl" in temp_data[i][2]:
+    #针对binder_ioctl函数与其调用的函数进行分析
+      temp_data3=[]
+      temp_data3.append([-1," ","A","call / reply","B"])
+      #call or reply from A to B
+      temp_data3.append([0,temp_data[i][0]," ",temp_data[i][1],"binder_ioctl"])
+      #调用层次,starttime,endtime,CPU,函数名
+      depth=1;
+      j=i;
+      while depth>0:
+        j=j+1
+        #；结尾的是无子函数调用的函数
+        if j==len(temp_data):
+          break
+        if "binder_ioctl" in temp_data[j][2]:
+          break
+        if "{" in temp_data[j][2]:
+          name=temp_data[j][2].split("(")[0].split()[0]
+          temp_data3.append([depth,temp_data[j][0]," ",temp_data[j][1],name])
+          depth = depth + 1
+        #{结尾的是包含子函数调用的函数的结束
+        if "}" in temp_data[j][2]:
+          depth = depth - 1
+          flag=-1
+          for k,z in enumerate(temp_data3[:-1]):
+            if depth == temp_data3[k][0] and flag <0:
+              flag=k
+          temp_data3[flag][2]=temp_data[j][0].split()[0]
+          #print str(depth)+' '+str(flag)+' '+temp_data3[flag][2]
+        if "lyx" in temp_data[j][2]:
+        #处理添加的内核输出语句，从中读出通信的两个进程名
+       #   /* lyx buffer  reply from surfaceflinger:2438 to inaro.wallpaper:2290 node 0 handle -1 size 16:0 */
+       #   /* lyx buffer  call  from inaro.wallpaper:2290 to surfaceflinger:0 node 2741 handle 15 size 76:0 */
+          fields = temp_data[j][2].split()
+          way=fields[3]
+          pidname1=fields[5]#.split(":")[0]
+          pidname2=fields[7]#.split(":")[0]
+      	  temp_data3[0][2]=pidname1
+      	  temp_data3[0][4]=pidname2
+      	  temp_data3[0][3]=way
+      else:
+      #格式化输出结果
+      # Thread_0x68-104 [000] ...1 6.269723552: tracing_mark_write: B|26337280|memblock_reserve\n\
+      # Thread_0x68-104 [000] ...1 6.269856426: tracing_mark_write: E\n\
+        if "A" not in temp_data3[0][2] and "B" not in temp_data3[0][4] and " " not in temp_data3[1][2]:
+          pidname1=temp_data3[0][2].split(":")[0]
+          thread1=temp_data3[0][2].split(":")[1].split(" ")[0]
+          pidname2=temp_data3[0][4].split(":")[0]
+          thread2=temp_data3[0][4].split(":")[1]
+          print ("{0:12} {1:5} .... {2:4}: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=0x191e000(0x68) next_pid={3:4} next_prio=0\\n\\".format(pidname1+"-104","[00"+temp_data3[1][3]+"]",temp_data[1][1],pidname1))
+          print ("{0:12} {1:5} .... {2:4}: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=a next_pid=0 next_prio=0\\n\\".format(pidname1+"-104","[00"+temp_data3[1][3]+"]",temp_data[1][2]))
+          for k,z in enumerate(temp_data3[:-1]):
+            if k > 0 and " " not in temp_data3[k][2]:
+              print ("{0:16} {1:5} ...1 {2:10}: tracing_mark_write: B|{3:10}|{4:20}\\n\\".format(" Thread_"+thread1+"-104","[00"+temp_data3[k][3]+"]",temp_data3[k][1],pidname1,temp_data3[k][4]))
+              print ("{0:16} {1:5} ...1 {2:10}: tracing_mark_write: E\\n\\".format(" Thread_"+thread1+"-104","[00"+temp_data3[k][3]+"]",temp_data3[k][2]))
+      i=j;
+  print "\\n;\"\n</script><!-- END TRACE --></body></html>"
+        
+if __name__ == '__main__':
+  main()

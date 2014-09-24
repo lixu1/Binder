@@ -1,0 +1,9 @@
+开发版版本： pandaboard 800X480
+Android 版本： 4.0.3
+内核版本： 3.2.0
+步骤：
+1，用附件里面的uImage 替换内核
+2，将tracefunctiongraph_longtime.sh 脚本导入开发版 /data 下，运行脚本，期间运行一些应用进行测试。
+3，将在/sdcard/ 下的binder输出导出，例如 ：binder_ftrace_20000101000309.txt
+4，使用handledata.py处理 python handledata.py binder_ftrace_20000101000309.txt > binder_ftrace_20000101000309.html
+5，输出的html格式即可使用Systrace工具的script.js 与 style.css，在chrome 下展示动态图形。

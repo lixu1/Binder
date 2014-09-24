@@ -1,0 +1,15 @@
+body{
+background-color:#EEEEEE
+}
+.myCSSclass1
+{
+color:red;
+margin-left:10px;
+}
+.show{
+display:block;
+}
+.hidden
+{
+display:none;
+}
