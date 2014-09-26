@@ -65,7 +65,7 @@ def main():
               flag=k
           temp_data3[flag][2]=temp_data[j][0].split()[0]
           #print str(depth)+' '+str(flag)+' '+temp_data3[flag][2]
-        if "lyx" in temp_data[j][2]:
+        if "lx" in temp_data[j][2]:
         #处理添加的内核输出语句，从中读出通信的两个进程名
        #   /* lyx buffer  reply from surfaceflinger:2438 to inaro.wallpaper:2290 node 0 handle -1 size 16:0 */
        #   /* lyx buffer  call  from inaro.wallpaper:2290 to surfaceflinger:0 node 2741 handle 15 size 76:0 */

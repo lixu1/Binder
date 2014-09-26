@@ -1,0 +1,92 @@
+<html>
+<head>
+<title></title>
+<meta http-equiv="content-type" content="text/html" charset="utf-8"><link rel="stylesheet" type="text/css" href="style.css">
+<style>
+.view {overflow: hidden;top: 0;bottom: 0;left: 0;right: 0;}
+</style>
+</head>
+<body>
+<hr>
+<div class="view">
+</div>
+<hr>
+<script language="javascript" type="text/javascript" src="script.js">
+</script>
+<script language="javascript">
+document.addEventListener('DOMContentLoaded', function() {
+if (!linuxPerfData)
+return;
+var m = new tracing.TraceModel(linuxPerfData);
+var timelineViewEl = document.querySelector('.view');
+ui.decorate(timelineViewEl, tracing.TimelineView);
+timelineViewEl.model = m;
+timelineViewEl.tabIndex = 1;
+timelineViewEl.timeline.focusElement = timelineViewEl;
+});
+</script>
+<script>
+var linuxPerfData = "\
+# tracer: nop\n\
+#\n\
+# entries-in-buffer/entries-written: 42096/42096   #P:2\n\
+#\n\
+#                              _-----=> irqs-off\n\
+#                             / _----=> need-resched\n\
+#                            | / _---=> hardirq/softirq\n\
+#                            || / _--=> preempt-depth\n\
+#                            ||| /     delay\n\
+#           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION\n\
+#              | |       |   ||||       |         |\n\
+2078-104     [001] .... 383.623565: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=0x191e000(0x68) next_pid=2078 next_prio=0\n\
+2078-104     [001] .... 383.623687: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=a next_pid=0 next_prio=0\n\
+ Thread_2078-104 [001] ...1 383.623565: tracing_mark_write: B|2078      |binder_ioctl        \n\
+ Thread_2078-104 [001] ...1 383.623687: tracing_mark_write: E\n\
+ Thread_2078-104 [001] ...1 383.623596: tracing_mark_write: B|2078      |binder_thread_write \n\
+ Thread_2078-104 [001] ...1 383.623687: tracing_mark_write: E\n\
+ Thread_2078-104 [001] ...1 383.623596: tracing_mark_write: B|2078      |binder_transaction  \n\
+ Thread_2078-104 [001] ...1 383.623687: tracing_mark_write: E\n\
+ Thread_2078-104 [001] ...1 383.623596: tracing_mark_write: B|2078      |binder_set_nice     \n\
+ Thread_2078-104 [001] ...1 383.623687: tracing_mark_write: E\n\
+ Thread_2078-104 [001] ...1 383.623657: tracing_mark_write: B|2078      |_raw_spin_lock_irqsave\n\
+ Thread_2078-104 [001] ...1 383.623687: tracing_mark_write: E\n\
+ Thread_2078-104 [001] ...1 383.623657: tracing_mark_write: B|2078      |__raw_spin_lock_irqsave\n\
+ Thread_2078-104 [001] ...1 383.623657: tracing_mark_write: E\n\
+2785-104     [001] .... 384.462280: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=0x191e000(0x68) next_pid=2785 next_prio=0\n\
+2785-104     [001] .... 384.511627: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=a next_pid=0 next_prio=0\n\
+ Thread_2797-104 [001] ...1 384.462280: tracing_mark_write: B|2785      |binder_ioctl        \n\
+ Thread_2797-104 [001] ...1 384.511627: tracing_mark_write: E\n\
+ Thread_2797-104 [001] ...1 384.462280: tracing_mark_write: B|2785      |binder_thread_write \n\
+ Thread_2797-104 [001] ...1 384.511627: tracing_mark_write: E\n\
+ Thread_2797-104 [001] ...1 384.462310: tracing_mark_write: B|2785      |binder_free_buf     \n\
+ Thread_2797-104 [001] ...1 384.511627: tracing_mark_write: E\n\
+ Thread_2797-104 [001] ...1 384.462371: tracing_mark_write: B|2785      |__wake_up           \n\
+ Thread_2797-104 [001] ...1 384.511596: tracing_mark_write: E\n\
+ Thread_2797-104 [001] ...1 384.462371: tracing_mark_write: B|2785      |_raw_spin_lock_irqsave\n\
+ Thread_2797-104 [001] ...1 384.511596: tracing_mark_write: E\n\
+ Thread_2797-104 [001] ...1 384.462371: tracing_mark_write: B|2785      |__raw_spin_lock_irqsave\n\
+ Thread_2797-104 [001] ...1 384.511535: tracing_mark_write: E\n\
+2081-104     [001] .... 390.173706: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=0x191e000(0x68) next_pid=2081 next_prio=0\n\
+2081-104     [001] .... 390.267974: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=a next_pid=0 next_prio=0\n\
+ Thread_2081-104 [001] ...1 390.173706: tracing_mark_write: B|2081      |binder_ioctl        \n\
+ Thread_2081-104 [001] ...1 390.267974: tracing_mark_write: E\n\
+ Thread_2081-104 [001] ...1 390.173736: tracing_mark_write: B|2081      |binder_thread_write \n\
+ Thread_2081-104 [001] ...1 390.267974: tracing_mark_write: E\n\
+ Thread_2081-104 [001] ...1 390.173736: tracing_mark_write: B|2081      |binder_transaction_buffer_release\n\
+ Thread_2081-104 [001] ...1 390.219085: tracing_mark_write: E\n\
+ Thread_2081-104 [001] ...1 390.173736: tracing_mark_write: B|2081      |binder_set_nice     \n\
+ Thread_2081-104 [001] ...1 390.219085: tracing_mark_write: E\n\
+ Thread_2081-104 [000] ...1 390.209320: tracing_mark_write: B|2081      |mix_pool_bytes_extract\n\
+ Thread_2081-104 [000] ...1 390.219085: tracing_mark_write: E\n\
+ Thread_2081-104 [000] ...1 390.209320: tracing_mark_write: B|2081      |_raw_spin_lock_irqsave\n\
+ Thread_2081-104 [000] ...1 390.219085: tracing_mark_write: E\n\
+ Thread_2081-104 [000] ...1 390.209320: tracing_mark_write: B|2081      |__raw_spin_lock_irqsave\n\
+ Thread_2081-104 [000] ...1 390.219055: tracing_mark_write: E\n\
+ Thread_2081-104 [001] ...1 390.219024: tracing_mark_write: B|2081      |ktime_get           \n\
+ Thread_2081-104 [001] ...1 390.219055: tracing_mark_write: E\n\
+ Thread_2081-104 [001] ...1 390.219024: tracing_mark_write: B|2081      |__raw_spin_lock     \n\
+ Thread_2081-104 [001] ...1 390.219055: tracing_mark_write: E\n\
+ Thread_2081-104 [001] ...1 390.219055: tracing_mark_write: B|2081      |ktime_get           \n\
+ Thread_2081-104 [001] ...1 390.219055: tracing_mark_write: E\n\
+\n;"
+</script><!-- END TRACE --></body></html>

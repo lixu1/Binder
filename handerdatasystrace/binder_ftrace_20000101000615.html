@@ -1,0 +1,70 @@
+<html>
+<head>
+<title></title>
+<meta http-equiv="content-type" content="text/html" charset="utf-8"><link rel="stylesheet" type="text/css" href="style.css">
+<style>
+.view {overflow: hidden;top: 0;bottom: 0;left: 0;right: 0;}
+</style>
+</head>
+<body>
+<hr>
+<div class="view">
+</div>
+<hr>
+<script language="javascript" type="text/javascript" src="script.js">
+</script>
+<script language="javascript">
+document.addEventListener('DOMContentLoaded', function() {
+if (!linuxPerfData)
+return;
+var m = new tracing.TraceModel(linuxPerfData);
+var timelineViewEl = document.querySelector('.view');
+ui.decorate(timelineViewEl, tracing.TimelineView);
+timelineViewEl.model = m;
+timelineViewEl.tabIndex = 1;
+timelineViewEl.timeline.focusElement = timelineViewEl;
+});
+</script>
+<script>
+var linuxPerfData = "\
+# tracer: nop\n\
+#\n\
+# entries-in-buffer/entries-written: 42096/42096   #P:2\n\
+#\n\
+#                              _-----=> irqs-off\n\
+#                             / _----=> need-resched\n\
+#                            | / _---=> hardirq/softirq\n\
+#                            || / _--=> preempt-depth\n\
+#                            ||| /     delay\n\
+#           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION\n\
+#              | |       |   ||||       |         |\n\
+2078-104     [001] .... 433.680694: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=0x191e000(0x68) next_pid=2078 next_prio=0\n\
+2078-104     [001] .... 434.241333: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=a next_pid=0 next_prio=0\n\
+ Thread_2170-104 [001] ...1 433.680694: tracing_mark_write: B|2078      |binder_ioctl        \n\
+ Thread_2170-104 [001] ...1 434.241333: tracing_mark_write: E\n\
+ Thread_2170-104 [001] ...1 433.680694: tracing_mark_write: B|2078      |binder_thread_write \n\
+ Thread_2170-104 [001] ...1 434.241333: tracing_mark_write: E\n\
+ Thread_2170-104 [001] ...1 433.680694: tracing_mark_write: B|2078      |binder_transaction  \n\
+ Thread_2170-104 [001] ...1 434.241333: tracing_mark_write: E\n\
+ Thread_2170-104 [001] ...1 433.680694: tracing_mark_write: B|2078      |binder_set_nice     \n\
+ Thread_2170-104 [001] ...1 434.241302: tracing_mark_write: E\n\
+ Thread_2170-104 [001] ...1 433.680755: tracing_mark_write: B|2078      |_raw_spin_lock_irqsave\n\
+ Thread_2170-104 [001] ...1 434.241302: tracing_mark_write: E\n\
+ Thread_2170-104 [001] ...1 433.680755: tracing_mark_write: B|2078      |__raw_spin_lock_irqsave\n\
+ Thread_2170-104 [001] ...1 434.241302: tracing_mark_write: E\n\
+ Thread_2170-104 [001] ...1 433.796813: tracing_mark_write: B|2078      |dequeue_task_fair   \n\
+ Thread_2170-104 [001] ...1 434.218170: tracing_mark_write: E\n\
+ Thread_2170-104 [001] ...1 433.796813: tracing_mark_write: B|2078      |update_curr         \n\
+ Thread_2170-104 [001] ...1 434.198028: tracing_mark_write: E\n\
+ Thread_2170-104 [000] ...1 433.887237: tracing_mark_write: B|2078      |PVRSRVDeviceLISR    \n\
+ Thread_2170-104 [000] ...1 434.176208: tracing_mark_write: E\n\
+ Thread_2170-104 [000] ...1 433.980285: tracing_mark_write: B|2078      |SGX_ISRHandler      \n\
+ Thread_2170-104 [000] ...1 434.176208: tracing_mark_write: E\n\
+ Thread_2170-104 [000] ...1 433.980285: tracing_mark_write: B|2078      |get_pid_task        \n\
+ Thread_2170-104 [000] ...1 434.176177: tracing_mark_write: E\n\
+ Thread_2170-104 [000] ...1 433.980285: tracing_mark_write: B|2078      |_raw_spin_lock      \n\
+ Thread_2170-104 [000] ...1 433.980377: tracing_mark_write: E\n\
+ Thread_2170-104 [000] ...1 433.980285: tracing_mark_write: B|2078      |__raw_spin_lock     \n\
+ Thread_2170-104 [000] ...1 433.980316: tracing_mark_write: E\n\
+\n;"
+</script><!-- END TRACE --></body></html>
