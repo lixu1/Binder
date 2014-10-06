@@ -91,10 +91,10 @@ $ git branch -a
 然后下载合适版本的内核，与刚下载输入的官方镜像的内核版本相同。
 $ git checkout remotes/origin/android-omap-tuna-3.0-ics-mr1
 2，配置内核 
-export PATH=~/prebuilt/arm-eabi-4.6/bin:$PATH
-export ARCH=arm
-export SUBARCH=arm
-export CROSS_COMPILE=arm-eabi-
+$ export PATH=~/prebuilt/arm-eabi-4.6/bin:$PATH
+$ export ARCH=arm
+$ export SUBARCH=arm
+$ export CROSS_COMPILE=arm-eabi-
 $ make tuna_defconfig
 
 3,编译内核 
@@ -131,7 +131,7 @@ boot.img-kernel： 内核映像，就是我们需要替换的
 boot.img-ramdisk.cpio.gz： 就是ramdisk.img，我们这次不用管它，当然有需要也可以定制它 
 然后，用如下命令生成新的boot.img 
 mkbootimg可执行程序可自己编译，我是下载网上别人编译好的直接使用的。
-$ eval ./mkbootimg $(sed s,boot.img-kernel,~/omap/arch/arm/boot/zImage, boot.img-mk)
+$ eval mkbootimg $(sed s,boot.img-kernel,~/omap/arch/arm/boot/zImage, boot.img-mk)
 4,刷入新生成的image
 $adb reboot-bootloader
 $fastboot flash boot boot.img
