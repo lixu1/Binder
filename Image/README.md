@@ -4,3 +4,11 @@
 -----
 remotes/origin/android-omap-tuna-3.0-ics-mr1
 内核版本 3.0.8  Ftrace编入 funtion funtion-graph
+
+2_zImage
+-----
+remotes/origin/android-omap-tuna-3.0-ics-mr1
+内核版本 3.0.8  无Ftrace
+
+3_boot.img
+Android 4.4 内核版本3.4.0-g9eb14ba  官方版本

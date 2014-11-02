@@ -17,5 +17,3 @@ echo 1 > $DPATH/tracing_on
 cat $DPATH/trace_pipe > /sdcard/binder_ftrace_$DATE.txt &
 
 
-
-

@@ -1,4 +1,4 @@
-Android 内核替换  （Ubuntu 12.04  64位系统， 手机型号：三星 Galaxy Nexus）
+Android 内核替换  （Ubuntu 12.04  64位系统， 手机型号：三星 Galaxy Nexus3 与 Nexus 5）
 
 一 ,环境配置 ：
 1，java 7 环境 
@@ -49,6 +49,7 @@ https://developers.google.com/android/nexus/images?hl=zh-cn
 四，内核替换流程
 1，下载内核
 $ git clone https://android.googlesource.com/kernel/omap.git
+            https://android.googlesource.com/kernel/msm.git
 $ cd omap
 $ git branch -a
 输出：
@@ -113,7 +114,8 @@ $ make LOCALVERSION=
 取得目前手机的boot.img，采用如下方式（需要先root） 
 $ adb shell
 $ su
-$ dd if=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot of=/sdcard/boot.img
+N3手机：$ dd if=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot of=/sdcard/boot.img
+N5手机：$ dd if=/dev/block/platform/msm_sdcc.1/by-name/boot of=/sdcard/boot.img
 $ exit
 $ adb pull /sdcard/boot.img
 

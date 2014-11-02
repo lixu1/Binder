@@ -1,0 +1,24 @@
+Ubuntu 12.04 64位
+=========
+
+1，/usr/bin/ld: cannot find -lX11 collect2: ld returned 1 exit status
+
+lx@lx-Lenovo-Product:/usr/lib$ locate libX11.so
+/usr/lib/i386-linux-gnu/libX11.so.6
+/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+/usr/lib/x86_64-linux-gnu/libX11.so
+/usr/lib/x86_64-linux-gnu/libX11.so.6
+/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+lx@lx-Lenovo-Product:/usr/lib$ sudo ln -s /usr/lib/i386-linux-gnu/libX11.so.6.3.0 /usr/lib/libX11.so
+
+
+2,/usr/bin/ld: cannot find -lX11
+collect2: ld returned 1 exit status
+make: *** [out/host/linux-x86/obj/lib/libOpenglRender.so] 错误 1
+
+sudo ln -s /usr/lib/i386-linux-gnu/libX11.so.6 /usr/lib/i386-linux-gnu/libX11.so
+
+
+3,chmod 777 /system
+mount -o rw,remount yaffs2 /system
+
