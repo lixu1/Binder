@@ -1,144 +1,129 @@
-Android 内核替换  （Ubuntu 12.04  64位系统， 手机型号：三星 Galaxy Nexus）
-
+Android 内核替换 （Ubuntu 12.04 64位系统， 手机型号：三星 Galaxy Nexus3 与 Nexus 5）
 一 ,环境配置 ：
-1，java 7 环境 
+1，java 7 环境
 $ sudo apt-get update
 $ sudo apt-get install openjdk-7-jdk
-
 2，其他的必须包
 $ sudo apt-get install libglapi-mesa:i386（下面的包依赖关系不满足，需要先安装这个包）
 $ sudo apt-get install git gnupg flex bison gperf build-essential \
-  zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev \
-  libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 \
-  libgl1-mesa-dev g++-multilib mingw32 tofrodos \
-  python-markdown libxml2-utils xsltproc zlib1g-dev:i386
+  zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev \
+  libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 \
+  libgl1-mesa-dev g++-multilib mingw32 tofrodos \
+  python-markdown libxml2-utils xsltproc zlib1g-dev:i386
 $ sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so
-
-3，配置USB 
+3，配置USB
 $ sudo vi /etc/udev/rules.d/51-android.rules
 在文件中写入：（<username>是用户名）
 # adb protocol on maguro/toro (Galaxy Nexus)
 SUBSYSTEM=="usb", ATTR{idVendor}=="04e8", ATTR{idProduct}=="6860", MODE="0600", OWNER="<username>"
 # fastboot protocol on maguro/toro (Galaxy Nexus)
 SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="4e30", MODE="0600", OWNER="<username>"
-
 4，下载adnroid SDK
 运行tool文件夹下android 可执行文件，安装Android SDK Tools, Android SDK Platform-Tools, Android SDK Bulid-Tools.
 配置fastboot 与 adb 在PATH 路径中
 $ vi ~/.bashrc
 在文件最后添加fastboot 与 adb所在文件夹路径：
 export PATH=$PATH:~/android/android-sdk-linux/platform-tools/
-
 5，下载 the prebuilt toolchain
 $ mkdir prebuilt
 $ cd prebuilt
 $ git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6
-
-
 二，将手机刷为官方镜像
 1，下载官方镜像
 https://developers.google.com/android/nexus/images?hl=zh-cn
 下载Factory Images "yakju" for Galaxy Nexus "maguro" (GSM/HSPA+)
-版本4.0.4 (IMM76I) 
+版本4.0.4 (IMM76I)
 2，解压后运行脚本文件：./flash-all.sh
-
 三，准备
 1，解锁手机
-2,root手机（360一键root工具） 
-
+2,root手机（360一键root工具）
 四，内核替换流程
 1，下载内核
 $ git clone https://android.googlesource.com/kernel/omap.git
+https://android.googlesource.com/kernel/msm.git
 $ cd omap
 $ git branch -a
 输出：
 * (no branch)
-  master
-  remotes/origin/HEAD -> origin/master
-  remotes/origin/android-omap-3.0
-  remotes/origin/android-omap-panda-3.0
-  remotes/origin/android-omap-steelhead-3.0-ics-aah
-  remotes/origin/android-omap-tuna-3.0
-  remotes/origin/android-omap-tuna-3.0-ics-mr1
-  remotes/origin/android-omap-tuna-3.0-jb-mr0
-  remotes/origin/android-omap-tuna-3.0-jb-mr1
-  remotes/origin/android-omap-tuna-3.0-jb-mr1.1
-  remotes/origin/android-omap-tuna-3.0-jb-mr2
-  remotes/origin/android-omap-tuna-3.0-jb-pre1
-  remotes/origin/android-omap-tuna-3.0-mr0
-  remotes/origin/android-omap-tuna-3.0-mr0.1
-  remotes/origin/glass-omap-xrr02
-  remotes/origin/glass-omap-xrr35
-  remotes/origin/glass-omap-xrr64b
-  remotes/origin/glass-omap-xrr88
-  remotes/origin/glass-omap-xrs36
-  remotes/origin/glass-omap-xrs68
-  remotes/origin/glass-omap-xrs92
-  remotes/origin/glass-omap-xrt35
-  remotes/origin/glass-omap-xrt73b
-  remotes/origin/glass-omap-xru85b
-  remotes/origin/glass-omap-xrv15b
-  remotes/origin/glass-omap-xrv15c
-  remotes/origin/glass-omap-xrv16
-  remotes/origin/glass-omap-xrv22
-  remotes/origin/glass-omap-xrv27
-  remotes/origin/glass-omap-xrv34
-  remotes/origin/glass-omap-xrv39
-  remotes/origin/glass-omap-xrv49
-  remotes/origin/linux-omap-3.0
-  remotes/origin/master
-  remotes/origin/sph-l700-fh05
+master
+remotes/origin/HEAD -> origin/master
+remotes/origin/android-omap-3.0
+remotes/origin/android-omap-panda-3.0
+remotes/origin/android-omap-steelhead-3.0-ics-aah
+remotes/origin/android-omap-tuna-3.0
+remotes/origin/android-omap-tuna-3.0-ics-mr1
+remotes/origin/android-omap-tuna-3.0-jb-mr0
+remotes/origin/android-omap-tuna-3.0-jb-mr1
+remotes/origin/android-omap-tuna-3.0-jb-mr1.1
+remotes/origin/android-omap-tuna-3.0-jb-mr2
+remotes/origin/android-omap-tuna-3.0-jb-pre1
+remotes/origin/android-omap-tuna-3.0-mr0
+remotes/origin/android-omap-tuna-3.0-mr0.1
+remotes/origin/glass-omap-xrr02
+remotes/origin/glass-omap-xrr35
+remotes/origin/glass-omap-xrr64b
+remotes/origin/glass-omap-xrr88
+remotes/origin/glass-omap-xrs36
+remotes/origin/glass-omap-xrs68
+remotes/origin/glass-omap-xrs92
+remotes/origin/glass-omap-xrt35
+remotes/origin/glass-omap-xrt73b
+remotes/origin/glass-omap-xru85b
+remotes/origin/glass-omap-xrv15b
+remotes/origin/glass-omap-xrv15c
+remotes/origin/glass-omap-xrv16
+remotes/origin/glass-omap-xrv22
+remotes/origin/glass-omap-xrv27
+remotes/origin/glass-omap-xrv34
+remotes/origin/glass-omap-xrv39
+remotes/origin/glass-omap-xrv49
+remotes/origin/linux-omap-3.0
+remotes/origin/master
+remotes/origin/sph-l700-fh05
 然后下载合适版本的内核，与刚下载输入的官方镜像的内核版本相同。
 $ git checkout remotes/origin/android-omap-tuna-3.0-ics-mr1
-2，配置内核 
-$ export PATH=~/prebuilt/arm-eabi-4.6/bin:$PATH
-$ export ARCH=arm
-$ export SUBARCH=arm
-$ export CROSS_COMPILE=arm-eabi-
+2，配置内核
+export PATH=~/prebuilt/arm-eabi-4.6/bin:$PATH
+export ARCH=arm
+export SUBARCH=arm
+export CROSS_COMPILE=arm-eabi-
 $ make tuna_defconfig
-
-3,编译内核 
-
+3,编译内核
 $ adb shell cat /proc/version
 查看内核版本号，Linux version 3.0.8-gda6252b ……
- 在Makefile中定义 EXTRAVERSION =-gda6252b 
- $ vi ./Makefile
-
- $ make kernelversion查看是否结果为 3.0.8-gda6252b
- 在.config中定义
- CONFIG_LOCALVERSION_AUTO=n
- 强制定义本地版本号为空
+在Makefile中定义 EXTRAVERSION =-gda6252b
+$ vi ./Makefile
+$ make kernelversion查看是否结果为 3.0.8-gda6252b
+在.config中定义
+CONFIG_LOCALVERSION_AUTO=n
+强制定义本地版本号为空
 $ make LOCALVERSION=
- 这样编译出来的内核版本号将和要被替换的内核一致
-取得目前手机的boot.img，采用如下方式（需要先root） 
+这样编译出来的内核版本号将和要被替换的内核一致
+取得目前手机的boot.img，采用如下方式（需要先root）
 $ adb shell
 $ su
-$ dd if=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot of=/sdcard/boot.img
+N3手机：$ dd if=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot of=/sdcard/boot.img
+N5手机：$ dd if=/dev/block/platform/msm_sdcc.1/by-name/boot of=/sdcard/boot.img
 $ exit
 $ adb pull /sdcard/boot.img
-
-3,下载一个工具来解开boot.img，以便替换kernel 
+3,下载一个工具来解开boot.img，以便替换kernel
 $ mkdir mkimg
 $ cp boot.img mkimg
 $ cd mkimg
 $ git clone https://github.com/glandium/unbootimg.git
-$ git clone https://android.googlesource.com/platform/system/core.git 
+$ git clone https://android.googlesource.com/platform/system/core.git
 $ gcc -o unbootimg/unbootimg unbootimg/unbootimg.c core/libmincrypt/sha.c -I core/include -I core/mkbootimg
 $ unbootimg/unbootimg boot.img
-解开后有如下文件： 
-boot.img-mk： mkbootimg所需的一些选项和参数 
-boot.img-kernel： 内核映像，就是我们需要替换的 
-boot.img-ramdisk.cpio.gz： 就是ramdisk.img，我们这次不用管它，当然有需要也可以定制它 
-然后，用如下命令生成新的boot.img 
+解开后有如下文件：
+boot.img-mk： mkbootimg所需的一些选项和参数
+boot.img-kernel： 内核映像，就是我们需要替换的
+boot.img-ramdisk.cpio.gz： 就是ramdisk.img，我们这次不用管它，当然有需要也可以定制它
+然后，用如下命令生成新的boot.img
 mkbootimg可执行程序可自己编译，我是下载网上别人编译好的直接使用的。
-$ eval mkbootimg $(sed s,boot.img-kernel,~/omap/arch/arm/boot/zImage, boot.img-mk)
+$ eval ./mkbootimg $(sed s,boot.img-kernel,~/omap/arch/arm/boot/zImage, boot.img-mk)
 4,刷入新生成的image
 $adb reboot-bootloader
 $fastboot flash boot boot.img
-
-
-
-
 Nothing worked for me until I finally found the answer here: http://ptspts.blogspot.co.il/2011/10/how-to-fix-adb-no-permissions-error-on.html
 I'm copying the text here in case it disappears in the future.
 Create a file named /tmp/android.rules with the following contents (hex vendor numbers were taken from the vendor list page):
@@ -175,36 +160,31 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="0930", MODE="0666"
 SUBSYSTEM=="usb", ATTRS{idVendor}=="19d2", MODE="0666"
 Run the following commands:
 sudo cp /tmp/android.rules /etc/udev/rules.d/51-android.rules
-sudo chmod 644   /etc/udev/rules.d/51-android.rules
+sudo chmod 644 /etc/udev/rules.d/51-android.rules
 sudo chown root. /etc/udev/rules.d/51-android.rules
 sudo service udev restart
 sudo killall adb
 Disconnect the USB cable between the phone and the computer.
 Reconnect the phone.
-Run adb devices to confirm that now it has permission to access the phone. 
+Run adb devices to confirm that now it has permission to access the phone.
 Please note that it's possible to use , USER="$LOGINNAME" instead of , MODE="0666" in the .rules file, substituting $LOGINNAME for your login name, i.e. what id -nu prints.
 In some cases it can be necessary to give the udev rules file a name that sorts close to the end, such as z51-android.rules.
-
-
 Fixes build bug
 security/smc/bridge_pub2sec.S:95: Error: selected processor does not support ARM mode `smc #0'
 ---
- security/smc/bridge_pub2sec.S |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
+security/smc/bridge_pub2sec.S | 1 +
+1 files changed, 1 insertions(+), 0 deletions(-)
 diff --git a/security/smc/bridge_pub2sec.S b/security/smc/bridge_pub2sec.S
 index 15cd3b7..30b8b35 100644
 --- a/security/smc/bridge_pub2sec.S
 +++ b/security/smc/bridge_pub2sec.S
 @@ -74,6 +74,7 @@ return_from_irq:
-        b       label_smc
- 
- label_smc:
-+       .arch_extension sec
-        INVALIDATE_BTB
-        dsb
-        dmb
+b label_smc
+label_smc:
++ .arch_extension sec
+INVALIDATE_BTB
+dsb
+dmb
 -- 
 1.7.0.4
-
 
