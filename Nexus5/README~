@@ -87,6 +87,7 @@ $ssh 192.168.1.40
 /home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/fastboot  reboot
 /home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/adb shell
 输出Ftrace
+使用服务器上的脚本，或使用tracefunctiongraph.sh 
 cd /home/wjbang/
 sh test.sh
 

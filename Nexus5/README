@@ -1,13 +1,13 @@
 Galaxy Nexus 5 使用Ftrace 与 Systrace 绘图
 系统配置：
---------
+============
 Android 系统版本4.4 与4.4.3
 内核版本3.4.0
 git clone https://android.googlesource.com/kernel/msm.git
 分支：remotes/origin/android-msm-hammerhead-3.4-kitkat-mr2
 (zImage-dtb，boot.img为编译过的，可直接使用）
 步骤：
----------
+============
 1，替换修改过的binder.c
 2，编译源码：
 $make hammerhead_defconfig
@@ -75,7 +75,7 @@ python sec2.py
 
 
 服务器端运行：
--------------
+============
 把改过的内核复制到n5服务器上
 $scp -P 1411 /home/lx/Binder/Nexus5/boot.img lxu@166.111.68.45:~/
 $ssh lxu@166.111.68.45 -p 1411
