@@ -20,15 +20,18 @@ Galaxy Nexus 5 使用Ftrace 与 Systrace 绘图
 		$cp arch/arm/boot/zImage-dtb ~/cg-ftracer/
 		$cd ~/cg-ftracer/
 		$./mkbootimg --base 0 --pagesize 2048 --kernel_offset 0x00008000 --ramdisk_offset 0x02900000 --second_offset 0x00f00000 --tags_offset 0x02700000 --cmdline 'console=ttyHSL0,115200,n8 androidboot.hardware=hammerhead user_debug=31 maxcpus=2 msm_watchdog_v2.enable=1' --kernel ./zImage-dtb --ramdisk ./ramdisk.cpio.gz -o ./boot.img
-		adb reboot bootloader
-		fastboot flash boot boot.img
-		fastboot reboot
+		$adb reboot bootloader
+		$fastboot flash boot boot.img
+		$fastboot reboot
 	4. 开启Ftrace 追踪数据
 		使用tracefunctiongraph.sh
-		将追踪后的数据用sec1.py 处理，将相关数据导入数据库 python sec1.py binder_ftrace_19700102000740.txt
+		将追踪后的数据用sec1.py 处理，将相关数据导入数据库 
+		$python sec1.py binder_ftrace_19700102000740.txt
 		需要先安装MYSQL，并添加数据库
-		修改root密码：mysqladmin -u root -p password 123456
-		登录：mysql -u root -p
+		修改root密码：(或者修改脚本内的密码)
+		$mysqladmin -u root -p password 123456
+		登录：
+		$mysql -u root -p
 		建立新的数据库：
 		mysql> drop database test;
 		mysql> create database test;
@@ -70,26 +73,26 @@ Galaxy Nexus 5 使用Ftrace 与 Systrace 绘图
 		+----------+-------------+------+-----+---------+-------+
 		7 rows in set (0.00 sec)
 
-		*mysql> select * from sec1;
-		*mysql> select * from sec2;
+		mysql> select * from sec1;
+		mysql> select * from sec2;
 		
-		*python sec2.py 会提示数据库的条数，根据自己输入的条数范围，生成相应的图形
+		$python sec2.py 会提示数据库的条数，根据自己输入的条数范围，生成相应的图形
 
 
 服务器端运行：
 ============
 	1. 把改过的内核复制到n5服务器上
-		*$scp -P 1411 /home/lx/Binder/Nexus5/boot.img lxu@166.111.68.45:~/
-		*$ssh lxu@166.111.68.45 -p 1411
-		*$scp boot.img lxu@192.168.1.40:~/
-		*$ssh 192.168.1.40
+		$scp -P 1411 /home/lx/Binder/Nexus5/boot.img lxu@166.111.68.45:~/
+		$ssh lxu@166.111.68.45 -p 1411
+		$scp boot.img lxu@192.168.1.40:~/
+		$ssh 192.168.1.40
 	2. 输入改过的内核
-		/home/wjbang/adt-bundle-linux-x86-20131030/sdk/platform-tools/adb reboot-bootloader
-		/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/fastboot  flash boot /*home/lxu/boot.img
-		/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/fastboot  reboot
-		/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/adb shell
+		$/home/wjbang/adt-bundle-linux-x86-20131030/sdk/platform-tools/adb reboot-bootloader
+		$/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/fastboot  flash boot /*home/lxu/boot.img
+		$/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/fastboot  reboot
+		$/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/adb shell
 	3. 输出Ftrace
 		使用服务器上的脚本，或使用tracefunctiongraph.sh
-		cd /home/wjbang/
-		sh test.sh
+		$cd /home/wjbang/
+		$sh test.sh
 
