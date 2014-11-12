@@ -26,10 +26,19 @@ def main():
   #print aa
   
   #输入需要提取的范围
-  num1=input('input start(ps:1):')
-  num2=input('input end(ps:'+str(aa)+'):')
-  
- 
+  num1=(int)(sys.argv[1])
+  num2=(int)(sys.argv[2])
+  #limit1=input('input start(ps:1):')
+  #limit2=input('input end(ps:'+str(aa)+'):')
+  limit=(int) (aa)
+
+  if num1 > limit:
+    num1 = 1;
+    num2 = limit-1;
+
+  if num2 > limit:
+    num2 = limit-1;
+
   temp_data = []
   #cur.fetch(aa)
   info2 = cur.fetchmany(aa)

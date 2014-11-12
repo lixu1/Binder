@@ -28,6 +28,8 @@ Galaxy Nexus 5 使用Ftrace 与 Systrace 绘图
 		将追踪后的数据用sec1.py 处理，将相关数据导入数据库 
 		$python sec1.py binder_ftrace_19700102000740.txt
 		需要先安装MYSQL，并添加数据库
+		给python 安装mysql驱动
+		$sudo apt-get install python-mysqldb
 		修改root密码：(或者修改脚本内的密码)
 		$mysqladmin -u root -p password 123456
 		登录：
