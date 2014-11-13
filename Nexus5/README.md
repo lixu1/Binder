@@ -89,12 +89,33 @@ Galaxy Nexus 5 使用Ftrace 与 Systrace 绘图
 		$scp boot.img lxu@192.168.1.40:~/
 		$ssh 192.168.1.40
 	2. 输入改过的内核
+		$sudo -i
 		$/home/wjbang/adt-bundle-linux-x86-20131030/sdk/platform-tools/adb reboot-bootloader
-		$/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/fastboot  flash boot /*home/lxu/boot.img
+		$/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/fastboot  flash boot /home/lxu/boot.img
 		$/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/fastboot  reboot
+		$/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/fastboot  devices
 		$/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/adb shell
+		$/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/adb devices
 	3. 输出Ftrace
 		使用服务器上的脚本，或使用tracefunctiongraph.sh
 		$cd /home/wjbang/
 		$sh test.sh
-
+	4. 使用一些脚本启动手机上的应用，使追踪数据更快
+		打电话：
+		#am start -a android.intent.action.CALL -d tel:10086
+		启动 google map 直接定位到北京:
+		#am start -a android.intent.action.VIEW geo:0,0?q=beijing
+		Music 和 Video（音乐和视频）的启动方法为：
+		# am start -n com.android.music/com.android.music.MusicBrowserActivity
+		# am start -n com.android.music/com.android.music.VideoBrowserActivity
+		# am start -n com.android.music/com.android.music.MediaPlaybackActivity
+		calendar（日历）的启动方法为：
+		# am start -n com.android.calendar/com.android.calendar.LaunchActivity
+		计算器（calculator）的启动方法为：
+		# am start -n com.android.calculator2/com.android.calculator2.Calculator
+	5. 导出数据到本地
+		$/home/lxu/adt-bundle-linux-x86-20131030/sdk/platform-tools/adb pull /sdcard/binder_ftrace_19700924180253.txt
+		$exit
+		$scp lxu@192.168.1.40:/home/lxu/binder_ftrace_19700924180253.txt ~/
+		$exit
+		$scp -P 1411 lxu@166.111.68.45:~/binder_ftrace_19700924180253.txt ~/
