@@ -23,7 +23,6 @@ def main():
   
   #获得表中有多少条数据
   aa=cur.execute("select * from sec2")
-  #print aa
   
   #输入需要提取的范围
   num1=(int)(sys.argv[1])
@@ -44,8 +43,12 @@ def main():
   #cur.fetch(aa)
   info2 = cur.fetchmany(aa)
   for ii in info2:
-    num = float(ii[0])
-    if num > num1 and num < num2:
+    num = int(ii[0])
+    #print num
+    #print num1
+    #print num2
+    if num >= num1 and num <= num2:
+      #print "yes"
       temp_data.append(ii)
   #print len(temp_data)
 
@@ -83,12 +86,13 @@ def main():
         temp_data3.append(temp_data2[i])
         
     #print temp_data3
-    
-    print ("{0:12} {1:5} .... {2:4}: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=0x191e000(0x68) next_pid={3:4} next_prio=0\\n\\".format(temp_data[j][2]+"-104","[00"+temp_data3[0][3]+"]",temp_data3[0][1],temp_data[j][2]))
-    print ("{0:12} {1:5} .... {2:4}: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=a next_pid=0 next_prio=0\\n\\".format(temp_data[j][2]+"-104","[00"+temp_data3[0][3]+"]",temp_data3[0][2]))
-    for k,z in enumerate(temp_data3[:-1]):
-      print ("{0:16} {1:5} ...1 {2:10}: tracing_mark_write: B|{3:10}|{4:20}\\n\\".format(" Thread_"+temp_data[j][3]+"-104","[00"+temp_data3[k][3]+"]",temp_data3[k][1],temp_data[j][2],temp_data3[k][4]))
-      print ("{0:16} {1:5} ...1 {2:10}: tracing_mark_write: E\\n\\".format(" Thread_"+temp_data[j][2]+"-104","[00"+temp_data3[k][3]+"]",temp_data3[k][2]))
+    if len(temp_data[j])>2 and len(temp_data3)>0:
+      print ("{0:12} {1:5} .... {2:4}: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=0x191e000(0x68) next_pid={3:n} next_prio=0\\n\\".format(temp_data[j][2]+"-104","[00"+temp_data3[0][3]+"]",temp_data3[0][1],(int)(temp_data[j][2])))
+      print ("{0:12} {1:5} .... {2:4}: sched_switch: prev_comm=a prev_pid=0 prev_prio=0 prev_state=R ==> next_comm=a next_pid=0 next_prio=0\\n\\".format(temp_data[j][2]+"-104","[00"+temp_data3[0][3]+"]",temp_data3[0][2]))
+      for k,z in enumerate(temp_data3[:-1]):
+        if len(temp_data[j])>3 and len(temp_data3[k])>4:
+          print ("{0:16} {1:5} ...1 {2:10}: tracing_mark_write: B|{3:10}|{4:20}\\n\\".format(" Thread_"+temp_data[j][3]+"-104","[00"+temp_data3[k][3]+"]",temp_data3[k][1],temp_data[j][2],temp_data3[k][4]))
+          print ("{0:16} {1:5} ...1 {2:}: tracing_mark_write: E\\n\\".format(" Thread_"+temp_data[j][2]+"-104","[00"+temp_data3[k][3]+"]",temp_data3[k][2]))
   
   
   cur.close()

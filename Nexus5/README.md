@@ -77,8 +77,9 @@ Galaxy Nexus 5 使用Ftrace 与 Systrace 绘图
 
 		mysql> select * from sec1;
 		mysql> select * from sec2;
-		
-		$python sec2.py 会提示数据库的条数，根据自己输入的条数范围，生成相应的图形
+	6. 生成图形：
+		$python count.py  输出两个表的数量
+		$python sec2.py 0 100 > index.html 根据输入的条数范围，生成相应的图形
 
 
 服务器端运行：

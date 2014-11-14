@@ -36,7 +36,7 @@ def main():
   cur = conn.cursor()
 
   #创建数据表（第一次执行创建，之后不再创建）
-  cur.execute("create table if not exists sec1(num int,stime varchar(20) ,dtime varchar(10),cpu varchar(10),fname varchar(100))")
+  cur.execute("create table if not exists sec1(num int,stime varchar(10) ,dtime varchar(10),cpu varchar(10),fname varchar(100))")
   cur.execute("create table if not exists sec2(num int,time varchar(20) ,pidname1 varchar(10),thread1 varchar(10),pidname2 varchar(10),thread2 varchar(10),way varchar(10))")
 
   #清空原数据表（？）
